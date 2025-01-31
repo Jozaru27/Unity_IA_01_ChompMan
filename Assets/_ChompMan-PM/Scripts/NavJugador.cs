@@ -41,9 +41,10 @@ public class NavJugador : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(anguloTeclas);
         }
     }
+    
     private void OnTriggerEnter(Collider other)
     {
-        // Detecta colisión con el objeto Cherry
+        // Detecta colisiï¿½n con el objeto Cherry
         if (other.CompareTag("Cherry"))
         {
             // Encuentra los enemigos por su nombre y los desactiva
