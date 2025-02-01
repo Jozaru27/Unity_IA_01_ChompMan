@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -39,7 +40,6 @@ public class MenuManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("¡Game Over!");
         Time.timeScale = 0f;  // Pausar el juego
         PanelPrincipal.SetActive(false);
         PanelMenú.SetActive(false);  // Ocultar el menú principal
@@ -52,6 +52,8 @@ public class MenuManager : MonoBehaviour
         PanelPrincipal.SetActive(true);
         PanelMenú.SetActive(true);  // Mostrar el menú principal
         PanelGameOver.SetActive(false);  // Ocultar el panel de Game Over
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Salir()

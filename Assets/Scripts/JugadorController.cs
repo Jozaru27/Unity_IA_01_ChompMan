@@ -21,19 +21,12 @@ public class JugadorController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        //Capturo el movimiento en los ejes
+        // MOVIMIENTO
         float movimientoH = Input.GetAxis("Horizontal");
         float movimientoV = Input.GetAxis("Vertical");
 
         Vector3 anguloTeclas = new Vector3(movimientoH, 0f, movimientoV);
         
-        // transform.Translate(anguloTeclas * velocidad * Time.deltaTime, Space.World);
-
-        //Genero el vector de movimiento
-        //Muevo el jugador
-        //transform.position += anguloTeclas * velocidad * Time.deltaTime;
-
         controller.Move(anguloTeclas * velocidad * Time.deltaTime);
         if (anguloTeclas != null && anguloTeclas != Vector3.zero)
         {
@@ -45,25 +38,25 @@ public class JugadorController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        // Si el jugador colide con un enemigo, se muestra "Game Over" en la consola
+        // Colisión con ENEMY
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Game Over");
-            // Aquí puedes activar el menú de Game Over o cualquier otra acción
-        }
+        
+            MenuManager menuManager = FindObjectOfType<MenuManager>();
 
-        // Detecta colisión con la Cherry
+            menuManager.GameOver(); 
+        }
+        // Colisión con CHERRY
         if (other.CompareTag("Cherry"))
         {
-            // Encuentra los enemigos por su tag y los desactiva
+            
             GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemy");
 
             foreach (GameObject enemigo in enemigos)
             {
-                enemigo.SetActive(false);  // Desactiva cada enemigo encontrado
+                enemigo.SetActive(false);  
             }
 
-            // Destruye o desactiva la Cherry
             Destroy(other.gameObject);
         }
     }
