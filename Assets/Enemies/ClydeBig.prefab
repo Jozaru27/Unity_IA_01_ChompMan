@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8348700859700423266}
   - component: {fileID: 8348700859703900994}
   - component: {fileID: 5783912973288144790}
+  - component: {fileID: 5460206544544622719}
   m_Layer: 0
   m_Name: ClydeBig
   m_TagString: Enemy
@@ -108,3 +109,26 @@ NavMeshAgent:
   m_BaseOffset: 1.1266578
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &5460206544544622719
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8348700859700786754}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.43635452
+  m_Height: 1.0726548
+  m_Direction: 1
+  m_Center: {x: 0.008497089, y: 0.5903304, z: -0.071640596}

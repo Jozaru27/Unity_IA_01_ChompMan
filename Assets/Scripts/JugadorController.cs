@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NavJugador : MonoBehaviour
+public class JugadorController : MonoBehaviour
 {
     float velocidad;
     GameObject GameobjectwithCharacterController;
@@ -12,7 +12,7 @@ public class NavJugador : MonoBehaviour
     void Start()
     {
         controller = this.GetComponent<CharacterController>();
-         velocidad = 3f;
+        velocidad = 3f;
     }
 
     void Update()
@@ -44,26 +44,27 @@ public class NavJugador : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        // Detecta colisi�n con el objeto Cherry
+
+        // Si el jugador colide con un enemigo, se muestra "Game Over" en la consola
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Game Over");
+            // Aquí puedes activar el menú de Game Over o cualquier otra acción
+        }
+
+        // Detecta colisión con la Cherry
         if (other.CompareTag("Cherry"))
         {
-            // Encuentra los enemigos por su nombre y los desactiva
-            GameObject blinky = GameObject.Find("Blinky");
-            GameObject bigBlinky = GameObject.Find("Big_Blinky");
+            // Encuentra los enemigos por su tag y los desactiva
+            GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemy");
 
-            if (blinky != null)
+            foreach (GameObject enemigo in enemigos)
             {
-                blinky.SetActive(false);
-            }
-
-            if (bigBlinky != null)
-            {
-                bigBlinky.SetActive(false);
+                enemigo.SetActive(false);  // Desactiva cada enemigo encontrado
             }
 
             // Destruye o desactiva la Cherry
             Destroy(other.gameObject);
         }
     }
-
 }

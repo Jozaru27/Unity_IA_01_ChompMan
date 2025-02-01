@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1680595822336232203}
   - component: {fileID: 1680595822339447339}
   - component: {fileID: 286396093018046176}
-  - component: {fileID: 8292010055360718873}
+  - component: {fileID: 3284450301569401531}
   m_Layer: 0
   m_Name: BlinkyBig
   m_TagString: Enemy
@@ -109,15 +109,26 @@ NavMeshAgent:
   m_BaseOffset: 1.1266578
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8292010055360718873
-MonoBehaviour:
+--- !u!136 &3284450301569401531
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680595822336333611}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ac5115779f96c2489cfb3fb95ca37f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.43635452
+  m_Height: 1.0726548
+  m_Direction: 1
+  m_Center: {x: 0.008497089, y: 0.5903304, z: -0.071640596}

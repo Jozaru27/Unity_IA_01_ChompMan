@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7864092635190250915}
   - component: {fileID: 7864092635195038851}
   - component: {fileID: 3926097454027005020}
+  - component: {fileID: 5343583471010007419}
   m_Layer: 0
   m_Name: PinkyBig
   m_TagString: Enemy
@@ -108,3 +109,26 @@ NavMeshAgent:
   m_BaseOffset: 1.1266578
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &5343583471010007419
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7864092635189760387}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.43635458
+  m_Height: 1.0726548
+  m_Direction: 1
+  m_Center: {x: 0.008497092, y: 0.5903304, z: -0.0716406}
