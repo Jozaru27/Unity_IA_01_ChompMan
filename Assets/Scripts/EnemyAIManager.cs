@@ -46,17 +46,18 @@ public class EnemyAIManager : MonoBehaviour
             int spawnIndex2 = Random.Range(0, spawnPoints.Length);
 
             // CLONA Y ACTIVA EL PRIMER ENEMIGO
-            GameObject clon1 = Instantiate(enemigo1, spawnPoints[spawnIndex1].position, Quaternion.identity);            clon1.name = enemigo1.name; // Mantiene el mismo nombre
+            GameObject clon1 = Instantiate(enemigo1, spawnPoints[spawnIndex1].position, Quaternion.identity);           
+            clon1.name = enemigo1.name; // Mantiene el mismo nombre
             clon1.SetActive(true);
             clon1.transform.parent = enemigosParent; // Lo coloca bajo el objeto padre
             enemigos = AgregarEnemigoALista(enemigos, clon1);  // Agregar el clon a la lista
 
-            // CLONA Y ACTIVA EL SEGUNDO ENEMIGO
-            GameObject clon2 = Instantiate(enemigo2, spawnPoints[spawnIndex2].position, Quaternion.identity);
-            clon2.name = enemigo2.name;
-            clon2.SetActive(true);
-            clon2.transform.parent = enemigosParent;
-            enemigos = AgregarEnemigoALista(enemigos, clon2);  // Agregar el clon a la lista
+            // CLONA Y ACTIVA EL SEGUNDO ENEMIGO - (DESACTIVADO PARA NO AHOGAR AL JUGADOR CON ENEMIGOS)
+            //GameObject clon2 = Instantiate(enemigo2, spawnPoints[spawnIndex2].position, Quaternion.identity);
+            //clon2.name = enemigo2.name;
+            //clon2.SetActive(true);
+            //clon2.transform.parent = enemigosParent;
+            //enemigos = AgregarEnemigoALista(enemigos, clon2);  // Agregar el clon a la lista
         }
     }
 
