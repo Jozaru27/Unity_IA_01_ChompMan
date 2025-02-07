@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Analytics.Platform;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,7 +19,7 @@ public class EnemyAIManager : MonoBehaviour
     void Start()
     {
         // BUSCA A CHOMP Y A LOS ENEMIGOS
-        jugador = GameObject.Find("Chomp"); 
+        jugador = GameObject.Find("Chomp");
 
         // INICIA LA GENERACIÓN DE ENEMIGOS
         StartCoroutine(GenerarEnemigos());
@@ -46,7 +47,7 @@ public class EnemyAIManager : MonoBehaviour
             int spawnIndex2 = Random.Range(0, spawnPoints.Length);
 
             // CLONA Y ACTIVA EL PRIMER ENEMIGO
-            GameObject clon1 = Instantiate(enemigo1, spawnPoints[spawnIndex1].position, Quaternion.identity);           
+            GameObject clon1 = Instantiate(enemigo1, spawnPoints[spawnIndex1].position, Quaternion.identity);
             clon1.name = enemigo1.name; // Mantiene el mismo nombre
             clon1.SetActive(true);
             clon1.transform.parent = enemigosParent; // Lo coloca bajo el objeto padre
@@ -103,7 +104,7 @@ public class EnemyAIManager : MonoBehaviour
 
         if (agente != null)
         {
-            agente.SetDestination(jugador.transform.position); 
+            agente.SetDestination(jugador.transform.position);
         }
     }
 
@@ -111,7 +112,7 @@ public class EnemyAIManager : MonoBehaviour
     // AI PINKY - INTENTA ADELANTARSE A CHOMPMAN
     void PinkyAI(GameObject enemigo)
     {
-        if (!enemigo.activeInHierarchy) return;  
+        if (!enemigo.activeInHierarchy) return;
 
         NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
 
@@ -138,7 +139,7 @@ public class EnemyAIManager : MonoBehaviour
             {
                 Vector3 puntoReferencia = jugador.transform.position + (jugador.transform.forward * 2);
                 Vector3 objetivo = puntoReferencia + (puntoReferencia - blinky.transform.position);
-                agente.SetDestination(objetivo);  
+                agente.SetDestination(objetivo);
             }
             else
             {
@@ -150,7 +151,7 @@ public class EnemyAIManager : MonoBehaviour
     // CLYDE - PERSIGUE A CHOMPMAN A NO SER QUE SE ACERQUE, HACIENDO QUE ESTE VUELVA A LA CASILLA DE ESCONDITE
     void ClydeAI(GameObject enemigo)
     {
-        if (!enemigo.activeInHierarchy) return;  
+        if (!enemigo.activeInHierarchy) return;
 
         NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
 
@@ -164,10 +165,9 @@ public class EnemyAIManager : MonoBehaviour
             }
             else
             {
-                Vector3 esquinaSegura = new Vector3(0f, enemigo.transform.position.y, 0f);  // Esquina inferior izquierda
-                agente.SetDestination(esquinaSegura);  // Clyde huye si está cerca
+                Vector3 safeZone = new Vector3(0f, enemigo.transform.position.y, 0f);
+                agente.SetDestination(safeZone);  // Clyde huye si está cerca
             }
         }
     }
-
 }
