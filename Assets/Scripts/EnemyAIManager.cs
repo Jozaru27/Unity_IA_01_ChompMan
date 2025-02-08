@@ -14,12 +14,30 @@ public class EnemyAIManager : MonoBehaviour
     public Transform enemigosParent; // OBJETO PADRE PARA LOS ENEMIGOS GENERADOS
     public Transform[] spawnPoints; // ARRAY DE SPAWN POINTS
 
+    private JugadorController jugadorController;
+
+    private Dictionary<GameObject, Material> materialesOriginales = new Dictionary<GameObject, Material>();
+    public Material ScaredGhost_MAT;  // Variable pública para asignar el material en el Inspector
 
     // Start is called before the first frame update
     void Start()
     {
         // BUSCA A CHOMP Y A LOS ENEMIGOS
         jugador = GameObject.Find("Chomp");
+
+        if (jugador != null)
+        {
+            jugadorController = jugador.GetComponent<JugadorController>(); // Obtiene JugadorController de Chomp
+        }
+
+    foreach (GameObject enemigo in enemigos)
+    {
+        Renderer renderer = enemigo.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            materialesOriginales[enemigo] = renderer.sharedMaterial; // Usa sharedMaterial en lugar de material
+        }
+    }
 
         // INICIA LA GENERACIÓN DE ENEMIGOS
         StartCoroutine(GenerarEnemigos());
@@ -35,30 +53,25 @@ public class EnemyAIManager : MonoBehaviour
 
             if (enemigos.Length == 0) yield break; // Evita errores si no hay enemigos
 
-            // Selecciona dos enemigos aleatorios de la lista
+            // Selecciona un enemigo aleatorio de la lista
             int index1 = Random.Range(0, enemigos.Length);
-            int index2 = Random.Range(0, enemigos.Length);
 
             GameObject enemigo1 = enemigos[index1];
-            GameObject enemigo2 = enemigos[index2];
 
-            // Selecciona dos SpawnPoints aleatorios
+            // Selecciona un SpawnPoint aleatorio
             int spawnIndex1 = Random.Range(0, spawnPoints.Length);
-            int spawnIndex2 = Random.Range(0, spawnPoints.Length);
+
+            // Asegúrate de que la posición Y del spawn sea 1
+            Vector3 spawnPosition1 = spawnPoints[spawnIndex1].position;
+            spawnPosition1.y = 1f;  // Fijamos la altura en Y a 1
 
             // CLONA Y ACTIVA EL PRIMER ENEMIGO
-            GameObject clon1 = Instantiate(enemigo1, spawnPoints[spawnIndex1].position, Quaternion.identity);
+            GameObject clon1 = Instantiate(enemigo1, spawnPosition1, Quaternion.identity);
             clon1.name = enemigo1.name; // Mantiene el mismo nombre
             clon1.SetActive(true);
             clon1.transform.parent = enemigosParent; // Lo coloca bajo el objeto padre
             enemigos = AgregarEnemigoALista(enemigos, clon1);  // Agregar el clon a la lista
 
-            // CLONA Y ACTIVA EL SEGUNDO ENEMIGO - (DESACTIVADO PARA NO AHOGAR AL JUGADOR CON ENEMIGOS)
-            //GameObject clon2 = Instantiate(enemigo2, spawnPoints[spawnIndex2].position, Quaternion.identity);
-            //clon2.name = enemigo2.name;
-            //clon2.SetActive(true);
-            //clon2.transform.parent = enemigosParent;
-            //enemigos = AgregarEnemigoALista(enemigos, clon2);  // Agregar el clon a la lista
         }
     }
 
@@ -69,72 +82,59 @@ public class EnemyAIManager : MonoBehaviour
         return listaTemp.ToArray();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // ASIGNA LA IA CORRESPONDIENTE SEGÚN EL TIPO DE ENEMIGO
         foreach (GameObject enemigo in enemigos)
         {
-            if (enemigo.name == "Blinky" || enemigo.name == "BlinkyBig")
+            if (!enemigo.activeInHierarchy) continue;
+
+            NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
+            Renderer renderer = enemigo.GetComponent<Renderer>();
+
+            if (agente == null || renderer == null) continue;
+
+            // Guardar el material original si no se ha guardado previamente
+            if (!materialesOriginales.ContainsKey(enemigo))
             {
-                BlinkyAI(enemigo);
+                materialesOriginales[enemigo] = renderer.sharedMaterial;
             }
-            else if (enemigo.name == "Pinky" || enemigo.name == "PinkyBig")
+
+            if (jugadorController != null && jugadorController.PelletActivo)
             {
-                PinkyAI(enemigo);
+                agente.SetDestination(new Vector3(0f, 0f, 0f)); // Ir a la Safe Zone
+                
+                if (ScaredGhost_MAT != null)
+                {
+                    renderer.sharedMaterial = ScaredGhost_MAT; // Cambiar a material azul (ScaredGhost_MAT)
+                }
             }
-            else if (enemigo.name == "Inky" || enemigo.name == "InkyBig")
+            else
             {
-                InkyAI(enemigo);
-            }
-            else if (enemigo.name == "Clyde" || enemigo.name == "ClydeBig")
-            {
-                ClydeAI(enemigo);
+                AplicarIA(enemigo, agente);
+
+                // Restaurar el material original del enemigo
+                if (materialesOriginales.ContainsKey(enemigo))
+                {
+                    renderer.sharedMaterial = materialesOriginales[enemigo]; // Restaurar material original
+                }
             }
         }
     }
 
-
-    // AI BLINKY - SIGUE A CHOMPMAN DIRECTAMENTE
-    void BlinkyAI(GameObject enemigo)
+    void AplicarIA(GameObject enemigo, NavMeshAgent agente)
     {
-        if (!enemigo.activeInHierarchy) return;
-
-        NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
-
-        if (agente != null)
+        if (enemigo.name.Contains("Blinky"))
         {
             agente.SetDestination(jugador.transform.position);
         }
-    }
-
-
-    // AI PINKY - INTENTA ADELANTARSE A CHOMPMAN
-    void PinkyAI(GameObject enemigo)
-    {
-        if (!enemigo.activeInHierarchy) return;
-
-        NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
-
-        if (agente != null)
+        else if (enemigo.name.Contains("Pinky"))
         {
             Vector3 objetivo = jugador.transform.position + (jugador.transform.forward * 4f);
-            agente.SetDestination(objetivo);  // Pinky intenta adelantarse a Pac-Man
+            agente.SetDestination(objetivo);
         }
-    }
-
-    // AI INKY - SI BLINKY EXISTE, SE MUEVE ERRÁTICAMENTE BASADA EN LA POSICIÓN DEL PRIMERO
-    // SI BLINKY NO EXISTE, PERSIGUE A CHOMPMAN COMO LO HACE BLINKY
-    void InkyAI(GameObject enemigo)
-    {
-        if (!enemigo.activeInHierarchy) return;
-
-        NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
-
-        GameObject blinky = GameObject.Find("Blinky");
-
-        if (agente != null)
+        else if (enemigo.name.Contains("Inky"))
         {
+            GameObject blinky = GameObject.Find("Blinky");
             if (blinky != null)
             {
                 Vector3 puntoReferencia = jugador.transform.position + (jugador.transform.forward * 2);
@@ -146,28 +146,18 @@ public class EnemyAIManager : MonoBehaviour
                 agente.SetDestination(jugador.transform.position);
             }
         }
-    }
-
-    // CLYDE - PERSIGUE A CHOMPMAN A NO SER QUE SE ACERQUE, HACIENDO QUE ESTE VUELVA A LA CASILLA DE ESCONDITE
-    void ClydeAI(GameObject enemigo)
-    {
-        if (!enemigo.activeInHierarchy) return;
-
-        NavMeshAgent agente = enemigo.GetComponent<NavMeshAgent>();
-
-        if (agente != null)
+        else if (enemigo.name.Contains("Clyde"))
         {
             float distancia = Vector3.Distance(enemigo.transform.position, jugador.transform.position);
-
             if (distancia > 5f)
             {
-                agente.SetDestination(jugador.transform.position);  // Clyde persigue
+                agente.SetDestination(jugador.transform.position);
             }
             else
             {
-                Vector3 safeZone = new Vector3(0f, enemigo.transform.position.y, 0f);
-                agente.SetDestination(safeZone);  // Clyde huye si está cerca
+                agente.SetDestination(new Vector3(0f, 0f, 0f)); // Safe Zone
             }
         }
     }
+
 }

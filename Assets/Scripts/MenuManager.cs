@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MenuManager : MonoBehaviour
     public GameObject PanelPrincipal; // Panel con la imagen de fondo
     public GameObject PanelMenú;    // Panel del Menú Principal
     public GameObject PanelGameOver;    // Panel de Game Over
+
+    public TMP_Text gameOverText;  
 
     // Start is called before the first frame update
     void Start()
@@ -38,12 +41,22 @@ public class MenuManager : MonoBehaviour
         Debug.Log("Puntuaciones aún no implementado.");
     }
 
-    public void GameOver()
+    public void GameOver(bool victoria)
     {
         Time.timeScale = 0f;  // Pausar el juego
         PanelPrincipal.SetActive(false);
         PanelMenú.SetActive(false);  // Ocultar el menú principal
         PanelGameOver.SetActive(true);  // Mostrar el panel de Game Over
+
+        // Cambiar el texto dependiendo de si el jugador ha ganado o perdido
+        if (victoria)
+        {
+            gameOverText.text = "Victoria";  // Cambiar a "Victoria" si ganó
+        }
+        else
+        {
+            gameOverText.text = "Game Over";  // Cambiar a "Game Over" si perdió
+        }
     }
 
     public void VolverAlMenu()

@@ -8,6 +8,7 @@ TagManager:
   - MazeGeo
   - Cherry
   - PowerPellet
+  - Dot
   layers:
   - Default
   - TransparentFX
