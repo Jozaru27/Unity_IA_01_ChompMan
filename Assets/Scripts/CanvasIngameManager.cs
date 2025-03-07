@@ -34,7 +34,7 @@ public class CanvasIngameManager : MonoBehaviour
     // Actualiza el texto en el Canvas
     private void ActualizarTexto()
     {
-        textoEnemigosDestruidos.text = "Enemigos Destruidos: " + enemigosDestruidos.ToString();
+        //textoEnemigosDestruidos.text = "Enemigos Destruidos: " + enemigosDestruidos.ToString();
     }
 
     public void ActualizarContadorDots(int nuevoContador)
